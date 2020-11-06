@@ -31,6 +31,13 @@
 
 在控制台窗口绘图
 
+```c++
+void DrawConsole(vector< vector<char> > new_graph);
+void DrawConsole(char[][] new_graph);
+```
+
+根据传入参数在控制台绘图
+
 ### game.cpp
 
 游戏主要内容，调用`graph.cpp`进行绘图，`getch()`获取键盘事件并作出响应
@@ -42,3 +49,68 @@ GameRecord NewMove(GameStatus &new_status);//移子棋
 ```
 
 在`main.cpp`中调用函数开启新游戏，并引用一个`struct GameStatus`在游戏中途退出时用于保存游戏进度。正常结束游戏返回`struct GameRecord`游戏记录
+
+### main.cpp
+
+实现游戏的初始化（从配置或全新初始）、游戏的保存
+
+```c++
+void GameInitialize();
+void GameSave();
+```
+
+读取保存有规定的格式
+
+`main()`实现登入过程、管理员后台、调用游戏和对游戏结果进行处理
+
+### player.h
+
+定义用户类
+
+```c++
+class Player
+{
+public:
+
+private:
+	int id_;
+	string name_;
+	string password_;
+};
+```
+
+### record.h
+
+定义游戏记录（特指正常结束的游戏）结构
+
+```c++
+struct Record
+{
+	tm time;
+	int game_id;
+	int player1_id;
+	int player2_id;
+	int winner;
+};
+```
+
+游戏记录包括游戏时间，游戏类型，两玩家的id，获胜情况（平局或某一方胜利）
+
+### status.h
+
+定义游戏状态（特指中途退出游戏时的状态）结构
+
+```c++
+struct Status
+{
+	tm  time;
+	int game_id;
+	int player1_id;
+	int player2_id;
+	vector< vector<char> > status;
+	int next_player;
+};
+```
+
+游戏状态包括游戏时间，游戏类型，两玩家的id，棋局状况，下一位出手的玩家
+
