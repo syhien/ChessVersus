@@ -13,7 +13,12 @@ struct PlayerInfo
 class Player
 {
 public:
-
+	bool PlayerExist(int id);
+	bool PlayerExist(string name);
+	string GetName(int id);
+	int GetId(string name);
+	bool PlayerLogin(int id, string password);
+	void PlayerChangePassword(int id, string new_password);
 private:
-	vector <PlayerInfo> all_player;
+	vector <PlayerInfo> all_player_;
 };
