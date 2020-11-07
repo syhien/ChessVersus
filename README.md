@@ -72,14 +72,19 @@ void GameSave();
 定义用户类
 
 ```c++
+struct PlayerInfo
+{
+	int id_;
+	string name_;
+	string password_;
+};
+
 class Player
 {
 public:
 
 private:
-	int id_;
-	string name_;
-	string password_;
+	vector <PlayerInfo> all_player;
 };
 ```
 
@@ -138,6 +143,6 @@ struct Status
 
 优先使用向量`vector`存储数据
 
-`vector<Player> player`储存所有玩家
+`class Player`中`vector <PlayerInfo> all_player`储存所有玩家信息
 
-`vector<Record> record`储存所有游戏记录
+`vector <Record> record`储存所有游戏记录
