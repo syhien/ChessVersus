@@ -67,9 +67,3 @@ int Player::Size()
 {
 	return all_player_.size();
 }
-
-vector<PlayerInfo> Player::GetAllPlayer()
-{
-	vector <PlayerInfo> allplayer = all_player_;
-	return allplayer;
-}

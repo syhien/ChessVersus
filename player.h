@@ -22,7 +22,8 @@ public:
 	void AddPlayer(int id, string name, string password);
 	void AddPlayer(PlayerInfo player);
 	int Size();
-	vector <PlayerInfo> GetAllPlayer();
+	friend void GameSafe();
+	friend void GameSafeWithStatus();
 private:
 	vector <PlayerInfo> all_player_;
 };

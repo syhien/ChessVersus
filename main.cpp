@@ -192,9 +192,8 @@ void AdminPanel()
 void GameSafe()
 {
 	ofstream fout("game.data");
-	fout << player.Size() << endl;
-	auto all_player = player.GetAllPlayer();
-	for (auto i : all_player)
+	fout << player.all_player_.size() << endl;
+	for (auto i : player.all_player_)
 		fout << i.id_ << " " << i.name_ << " " << i.password_ << endl;
 	fout << record.size() << endl;
 	for (auto i : record)
@@ -205,9 +204,8 @@ void GameSafe()
 void GameSafeWithStatus()
 {
 	ofstream fout("game.data");
-	fout << player.Size() << endl;
-	auto all_player = player.GetAllPlayer();
-	for (auto i : all_player)
+	fout << player.all_player_.size() << endl;
+	for (auto i : player.all_player_)
 		fout << i.id_ << " " << i.name_ << " " << i.password_ << endl;
 	fout << record.size() << endl;
 	for (auto i : record)
