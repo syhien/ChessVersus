@@ -19,7 +19,7 @@ bool Player::PlayerExist(string name)
 
 string Player::GetName(int id)
 {
-	string name;
+	string name = "";
 	for (auto i : all_player_)
 		if (i.id_ == id)
 			name = i.name_;
@@ -28,17 +28,17 @@ string Player::GetName(int id)
 
 int Player::GetId(string name)
 {
-	int id;
+	int id = -1;
 	for (auto i : all_player_)
 		if (i.name_ == name)
 			id = i.id_;
 	return id;
 }
 
-bool Player::PlayerLogin(int id, string password)
+bool Player::PlayerLogin(string name, string password)
 {
 	for (auto i : all_player_)
-		if (i.id_ == id)
+		if (i.name_ == name)
 			if (i.password_ == password)
 				return true;
 			else
@@ -56,4 +56,9 @@ void Player::PlayerChangePassword(int id, string new_password)
 void Player::AddPlayer(int id, string name, string password)
 {
 	all_player_.push_back({ id,name,password });
+}
+
+void Player::AddPlayer(PlayerInfo player)
+{
+	all_player_.push_back(player);
 }

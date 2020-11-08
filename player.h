@@ -17,9 +17,10 @@ public:
 	bool PlayerExist(string name);
 	string GetName(int id);
 	int GetId(string name);
-	bool PlayerLogin(int id, string password);
+	bool PlayerLogin(string name, string password);
 	void PlayerChangePassword(int id, string new_password);
 	void AddPlayer(int id, string name, string password);
+	void AddPlayer(PlayerInfo player);
 private:
 	vector <PlayerInfo> all_player_;
 };
