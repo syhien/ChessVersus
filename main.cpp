@@ -49,7 +49,16 @@ void GameInitialize()
 	else//ÓÐÅäÖÃ
 	{
 		fin >> admin_password;
-
+		int num_of_player;
+		fin >> num_of_player;
+		for (int i = 0; i < num_of_player; i++)
+		{
+			int id;
+			string name;
+			string password;
+			fin >> id >> name >> password;
+			player.AddPlayer(id, name, password);
+		}
 	}
 	fin.close();
 }

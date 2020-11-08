@@ -52,3 +52,8 @@ void Player::PlayerChangePassword(int id, string new_password)
 		if (i.id_ == id)
 			i.password_ = new_password;
 }
+
+void Player::AddPlayer(int id, string name, string password)
+{
+	all_player_.push_back({ id,name,password });
+}

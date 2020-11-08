@@ -19,6 +19,7 @@ public:
 	int GetId(string name);
 	bool PlayerLogin(int id, string password);
 	void PlayerChangePassword(int id, string new_password);
+	void AddPlayer(int id, string name, string password);
 private:
 	vector <PlayerInfo> all_player_;
 };
