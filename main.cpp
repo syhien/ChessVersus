@@ -83,7 +83,7 @@ void Login()
 		cout << "当前已登录" << num_of_login_player << "位玩家\n";
 		if (num_of_login_player == 1)
 			cout << "Player 1: " << player.GetName(player1_id) << " 已登录\n还需要登录1位玩家\n";
-		cout << "按下相应按键执行操作:\n1.用户登录\n2.用户注册\nESC.退出程序\n";
+		cout << "按下相应按键执行操作:\n1.用户登录\n2.用户注册\nESC.退出登录\n";
 		char ch;
 		PlayerInfo new_player;
 		string login_user_name;
@@ -147,6 +147,19 @@ void Login()
 				_getch();
 				break;
 			}
+			break;
+		case '2':
+			cout << "请输入你的昵称：\n";
+			cin >> login_user_name;
+			new_player.id_ = rand() % 100000;
+			while (player.GetName(new_player.id_) != "")
+				new_player.id_ = rand() % 100000;
+			new_player.name_ = login_user_name;
+			cout << "输入你的用户密码，请不要使用空格:\n";
+			cin >> new_player.password_;
+			player.AddPlayer(new_player);
+			cout << "注册成功，请重新登录\n" << kick_to_continue;
+			_getch();
 			break;
 		case 27:
 			login_exit = 1;
