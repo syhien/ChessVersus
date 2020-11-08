@@ -59,6 +59,14 @@ void GameInitialize()
 			fin >> id >> name >> password;
 			player.AddPlayer(id, name, password);
 		}
+		int num_of_records;
+		fin >> num_of_records;
+		for (int i = 0; i < num_of_records; i++)
+		{
+			Record new_record;
+			fin >> new_record.time.tm_sec >> new_record.time.tm_min >> new_record.time.tm_hour >> new_record.time.tm_mday >> new_record.time.tm_mon >> new_record.time.tm_year >> new_record.time.tm_wday >> new_record.time.tm_yday >> new_record.time.tm_isdst >> new_record.game_id >> new_record.player1_id >> new_record.player2_id >> new_record.winner;
+			record.push_back(new_record);
+		}
 	}
 	fin.close();
 }
