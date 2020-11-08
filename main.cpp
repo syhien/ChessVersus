@@ -19,9 +19,13 @@ string admin_password;
 int player1_id;
 int player2_id;
 
+bool status_exist;
+
 void GameInitialize();
 void Login();
 void AdminPanel();
+void GameSafe();
+void GameSafeWithStatus();
 
 int main()
 {
@@ -29,6 +33,9 @@ int main()
 	srand(time(0));
 	GameInitialize();
 	Login();
+
+	GameSafe();
+	//GameSafeWithStatus();
 
 	cout << "\nUnfinished project\n";
 	return 0;
@@ -68,6 +75,13 @@ void GameInitialize()
 			Record new_record;
 			fin >> new_record.time.tm_sec >> new_record.time.tm_min >> new_record.time.tm_hour >> new_record.time.tm_mday >> new_record.time.tm_mon >> new_record.time.tm_year >> new_record.time.tm_wday >> new_record.time.tm_yday >> new_record.time.tm_isdst >> new_record.game_id >> new_record.player1_id >> new_record.player2_id >> new_record.winner;
 			record.push_back(new_record);
+		}
+		int status_exist_int;
+		fin >> status_exist_int;
+		status_exist = status_exist_int ? true : false;
+		if (status_exist)
+		{
+			//
 		}
 	}
 	fin.close();
@@ -173,4 +187,31 @@ void Login()
 void AdminPanel()
 {
 
+}
+
+void GameSafe()
+{
+	ofstream fout("game.data");
+	fout << player.Size() << endl;
+	auto all_player = player.GetAllPlayer();
+	for (auto i : all_player)
+		fout << i.id_ << " " << i.name_ << " " << i.password_ << endl;
+	fout << record.size() << endl;
+	for (auto i : record)
+		fout << i.time.tm_sec << " " << i.time.tm_min << " " << i.time.tm_hour << " " << i.time.tm_mday << " " << i.time.tm_mon << " " << i.time.tm_year << " " << i.time.tm_wday << " " << i.time.tm_yday << " " << i.time.tm_isdst << " " << i.game_id << " " << i.player1_id << " " << i.player2_id << " " << i.winner << endl;
+	fout << "0";
+}
+
+void GameSafeWithStatus()
+{
+	ofstream fout("game.data");
+	fout << player.Size() << endl;
+	auto all_player = player.GetAllPlayer();
+	for (auto i : all_player)
+		fout << i.id_ << " " << i.name_ << " " << i.password_ << endl;
+	fout << record.size() << endl;
+	for (auto i : record)
+		fout << i.time.tm_sec << " " << i.time.tm_min << " " << i.time.tm_hour << " " << i.time.tm_mday << " " << i.time.tm_mon << " " << i.time.tm_year << " " << i.time.tm_wday << " " << i.time.tm_yday << " " << i.time.tm_isdst << " " << i.game_id << " " << i.player1_id << " " << i.player2_id << " " << i.winner << endl;
+	fout << "1";
+	//
 }

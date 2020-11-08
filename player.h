@@ -21,6 +21,8 @@ public:
 	void PlayerChangePassword(int id, string new_password);
 	void AddPlayer(int id, string name, string password);
 	void AddPlayer(PlayerInfo player);
+	int Size();
+	vector <PlayerInfo> GetAllPlayer();
 private:
 	vector <PlayerInfo> all_player_;
 };

@@ -62,3 +62,14 @@ void Player::AddPlayer(PlayerInfo player)
 {
 	all_player_.push_back(player);
 }
+
+int Player::Size()
+{
+	return all_player_.size();
+}
+
+vector<PlayerInfo> Player::GetAllPlayer()
+{
+	vector <PlayerInfo> allplayer = all_player_;
+	return allplayer;
+}
