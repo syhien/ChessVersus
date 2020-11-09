@@ -82,9 +82,19 @@ struct PlayerInfo
 class Player
 {
 public:
-
+	bool PlayerExist(int id);
+	bool PlayerExist(string name);
+	string GetName(int id);
+	int GetId(string name);
+	bool PlayerLogin(string name, string password);
+	void PlayerChangePassword(int id, string new_password);
+	void AddPlayer(int id, string name, string password);
+	void AddPlayer(PlayerInfo player);
+	int Size();
+	friend void GameSafe();
+	friend void GameSafeWithStatus();
 private:
-	vector <PlayerInfo> all_player;
+	vector <PlayerInfo> all_player_;
 };
 ```
 
@@ -143,6 +153,6 @@ struct Status
 
 优先使用向量`vector`存储数据
 
-`class Player`中`vector <PlayerInfo> all_player`储存所有玩家信息
+`class Player`中`vector <PlayerInfo> all_player_`储存所有玩家信息
 
 `vector <Record> record`储存所有游戏记录
