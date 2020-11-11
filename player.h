@@ -24,6 +24,7 @@ public:
 	int Size();
 	friend void GameSafe();
 	friend void GameSafeWithStatus();
+	friend void AdminPanel();
 private:
 	vector <PlayerInfo> all_player_;
 };

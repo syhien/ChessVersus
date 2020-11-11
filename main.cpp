@@ -116,10 +116,8 @@ void Login()
 				if (login_admin_password == admin_password)
 					AdminPanel();
 				else
-				{
 					cout << "管理员密码错误\n" << kick_to_continue, _getch();
-					break;
-				}
+				break;
 			}
 			if (!player.PlayerExist(login_user_name))
 			{
@@ -186,7 +184,40 @@ void Login()
 
 void AdminPanel()
 {
-
+	bool admin_logout = 0;
+	while (!admin_logout)
+	{
+		system("cls");
+		cout << "管理员操作:\n1.查看所有用户\n2.新增用户\n3.修改用户信息\n4.删除用户\n5.修改管理员密码\n6.查看所有游戏记录\n7.删除指定游戏记录\n0.退出\n";
+		int ch;
+		cin >> ch;
+		switch (ch)
+		{
+		case 1:
+			for (auto i : player.all_player_)
+				cout << "id:" << i.id_ << " name:" << i.name_ << " password:" << i.password_ << endl;
+			cout << kick_to_continue, _getch();
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		case 7:
+			break;
+		case 0:
+			cout << "退出管理员面板\n" << kick_to_continue, _getch();
+			admin_logout = 1;
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 void GameSafe()
