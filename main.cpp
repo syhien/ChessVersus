@@ -269,6 +269,15 @@ void AdminPanel()
 			cout << kick_to_continue, _getch();
 			break;
 		case 6:
+			for (auto i : record)
+			{
+				cout << "游戏类型：" << (i.game_id == 1 ? "翻转棋" : (i.game_id == 2 ? "五子棋" : "移子棋")) << endl;
+				cout << "UTC +0 游戏时间：" << asctime(&i.time);
+				cout << "玩家1：" << player.GetName(i.player1_id) << " 玩家2：" << player.GetName(i.player2_id) << endl;
+				cout << "获胜情况：" << (i.winner == 0 ? "平局" : (i.winner == 1 ? "玩家1获胜" : "玩家2获胜")) << endl;
+				cout << endl << endl;
+			}
+			cout << kick_to_continue, _getch();
 			break;
 		case 7:
 			break;
