@@ -26,6 +26,8 @@ void Login();
 void AdminPanel();
 void GameSafe();
 void GameSafeWithStatus();
+void DrawConsole(char chess[8][8], pair<int, int> current_positon);
+void GraphTest();
 
 int main()
 {
@@ -372,4 +374,10 @@ void GameSafeWithStatus()
 		fout << i.time.tm_sec << " " << i.time.tm_min << " " << i.time.tm_hour << " " << i.time.tm_mday << " " << i.time.tm_mon << " " << i.time.tm_year << " " << i.time.tm_wday << " " << i.time.tm_yday << " " << i.time.tm_isdst << " " << i.game_id << " " << i.player1_id << " " << i.player2_id << " " << i.winner << endl;
 	fout << "1";
 	//
+}
+
+void GraphTest()
+{
+	char chess[8][8] = { {'+','-','+','+',' ','+','+','+'},{'+','-','+','+',' ','+','+','+'} ,{'+','-','+','+',' ','+','+','+'} ,{'+','-','+','+',' ','+','+','+'} ,{'+','-','+','+',' ','+','+','+'} ,{'+','-','+','+',' ','+','+','+'} ,{'+','-','+','+',' ','+','+','+'} ,{'+','-','+','+',' ','+','+','+'} };
+	DrawConsole(chess, make_pair(3, 2));
 }
