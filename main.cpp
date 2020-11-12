@@ -263,6 +263,10 @@ void AdminPanel()
 			}
 			break;
 		case 5:
+			cout << "请输入新的管理员密码：\n";
+			cin >> admin_password;
+			cout << "新管理员密码为：" << admin_password << endl;
+			cout << kick_to_continue, _getch();
 			break;
 		case 6:
 			break;
