@@ -6,6 +6,7 @@ using namespace std;
 
 void DrawConsole(char chess[8][8], pair<int, int> current_positon)
 {
+	system("cls");
 	string graph = "";
 	for (int i = 0; i < 8; i++)
 	{
