@@ -191,6 +191,8 @@ void AdminPanel()
 		cout << "管理员操作:\n1.查看所有用户\n2.新增用户\n3.修改用户信息\n4.删除用户\n5.修改管理员密码\n6.查看所有游戏记录\n7.删除指定游戏记录\n0.退出\n";
 		int ch;
 		cin >> ch;
+		PlayerInfo new_player;
+		int edit_player_id;
 		switch (ch)
 		{
 		case 1:
@@ -199,10 +201,66 @@ void AdminPanel()
 			cout << kick_to_continue, _getch();
 			break;
 		case 2:
+			cout << "输入新用户昵称（不含空格）和密码（不含空格），用空格或换行分割:\n";
+			new_player.id_ = rand() % 100000;
+			while (player.PlayerExist(new_player.id_))
+				new_player.id_ = rand() % 100000;
+			cin >> new_player.name_ >> new_player.password_;
+			player.AddPlayer(new_player);
+			cout << "添加完成\n" << kick_to_continue;
+			_getch();
 			break;
 		case 3:
+			for (auto i : player.all_player_)
+				cout << "id:" << i.id_ << " name:" << i.name_ << " password:" << i.password_ << endl;
+			cout << kick_to_continue, _getch();
+			cout << "输入待编辑新的用户的id\n";
+			cin >> edit_player_id;
+			if(!player.PlayerExist(edit_player_id))
+			{
+				cout << "指定id用户不存在\n" << kick_to_continue;
+				_getch();
+				break;
+			}
+			for (auto i : player.all_player_)
+				if (i.id_ == edit_player_id)
+				{
+					new_player = i;
+					break;
+				}
+			player.DeletePlayer(edit_player_id);
+			cout << "是否修改昵称？该用户原昵称为:" << new_player.name_ << endl << ask_for_check;
+			if (_getch() == 'y')
+			{
+				cout << "输入其新昵称:\n";
+				cin >> new_player.name_;
+			}
+			cout << "是否修改密码？该用户原密码为:" << new_player.password_ << endl << ask_for_check;
+			if (_getch() == 'y')
+			{
+				cout << "输入其新密码:\n";
+				cin >> new_player.password_;
+			}
+			player.AddPlayer(new_player);
+			cout << "修改完成\n" << kick_to_continue;
+			_getch();
 			break;
 		case 4:
+			for (auto i : player.all_player_)
+				cout << "id:" << i.id_ << " name:" << i.name_ << " password:" << i.password_ << endl;
+			cout << "输入待删除用户id\n";
+			cin >> edit_player_id;
+			if(!player.PlayerExist(edit_player_id))
+			{
+				cout << "用户不存在，删除失败\n" << kick_to_continue;
+				_getch();
+			}
+			else
+			{
+				player.DeletePlayer(edit_player_id);
+				cout << "删除成功\n" << kick_to_continue;
+				_getch();
+			}
 			break;
 		case 5:
 			break;
@@ -223,6 +281,7 @@ void AdminPanel()
 void GameSafe()
 {
 	ofstream fout("game.data");
+	fout << admin_password << endl;
 	fout << player.all_player_.size() << endl;
 	for (auto i : player.all_player_)
 		fout << i.id_ << " " << i.name_ << " " << i.password_ << endl;
@@ -235,6 +294,7 @@ void GameSafe()
 void GameSafeWithStatus()
 {
 	ofstream fout("game.data");
+	fout << admin_password << endl;
 	fout << player.all_player_.size() << endl;
 	for (auto i : player.all_player_)
 		fout << i.id_ << " " << i.name_ << " " << i.password_ << endl;

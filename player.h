@@ -22,6 +22,7 @@ public:
 	void AddPlayer(int id, string name, string password);
 	void AddPlayer(PlayerInfo player);
 	int Size();
+	bool DeletePlayer(int id);
 	friend void GameSafe();
 	friend void GameSafeWithStatus();
 	friend void AdminPanel();

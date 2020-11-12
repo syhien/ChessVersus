@@ -67,3 +67,15 @@ int Player::Size()
 {
 	return all_player_.size();
 }
+
+bool Player::DeletePlayer(int id)
+{
+	if (!PlayerExist(id))
+		return 0;
+	for (auto i = all_player_.begin(); i != all_player_.end(); i++)
+		if (i->id_ == id)
+		{
+			all_player_.erase(i);
+			return 1;
+		}
+}
