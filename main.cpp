@@ -193,6 +193,7 @@ void AdminPanel()
 		cin >> ch;
 		PlayerInfo new_player;
 		int edit_player_id;
+		int record_count;
 		switch (ch)
 		{
 		case 1:
@@ -280,6 +281,25 @@ void AdminPanel()
 			cout << kick_to_continue, _getch();
 			break;
 		case 7:
+			record_count = 0;
+			for (auto i : record)
+			{
+				cout << "<" << record_count++ << ">" << endl;
+				cout << "游戏类型：" << (i.game_id == 1 ? "翻转棋" : (i.game_id == 2 ? "五子棋" : "移子棋")) << endl;
+				cout << "UTC +0 游戏时间：" << asctime(&i.time);
+				cout << "玩家1：" << player.GetName(i.player1_id) << " 玩家2：" << player.GetName(i.player2_id) << endl;
+				cout << "获胜情况：" << (i.winner == 0 ? "平局" : (i.winner == 1 ? "玩家1获胜" : "玩家2获胜")) << endl;
+				cout << endl << endl;
+			}
+			cout << "请输入想要删除的记录的某条记录尖括号内的数字，不进行删除请输入-1\n";
+			cin >> record_count;
+			if (record_count == -1)
+			{
+				cout << "删除失败\n" << kick_to_continue, _getch();
+				break;
+			}
+			record.erase(record.begin() + record_count);
+			cout << "删除成功\n" << kick_to_continue, _getch();
 			break;
 		case 0:
 			cout << "退出管理员面板\n" << kick_to_continue, _getch();
