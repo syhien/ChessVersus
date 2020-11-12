@@ -34,6 +34,42 @@ int main()
 	GameInitialize();
 	Login();
 
+	bool game_exit = 0;
+	while (!game_exit)
+	{
+		fflush(stdin);
+		system("cls");
+		cout << "当前登录用户：" << player.GetName(player1_id) << endl << "当前登录用户：" << player.GetName(player2_id) << endl;
+		cout << "希望做些什么呢？按下操作前对应的键盘按键吧\n1.开始新游戏\n2.查看游戏记录\nESC.退出游戏\n";
+		char ch = _getch();
+
+		switch (ch)
+		{
+		case '1':
+
+			break;
+		case '2':
+			for (auto i : record)
+				if ((i.player1_id == player1_id and i.player2_id == player2_id) or (i.player1_id == player2_id and i.player2_id == player1_id))
+				{
+					cout << "游戏类型：" << (i.game_id == 1 ? "翻转棋" : (i.game_id == 2 ? "五子棋" : "移子棋")) << endl;
+					cout << "UTC +0 游戏时间：" << asctime(&i.time);
+					cout << "玩家1：" << player.GetName(i.player1_id) << " 玩家2：" << player.GetName(i.player2_id) << endl;
+					cout << "获胜情况：" << (i.winner == 0 ? "平局" : (i.winner == 1 ? "玩家1获胜" : "玩家2获胜")) << endl;
+					cout << endl << endl;
+				}
+			cout << kick_to_continue, _getch();
+			break;
+		case 27:
+			cout << "退出游戏\n";
+			game_exit = 1;
+			cout << kick_to_continue, _getch();
+			break;
+		default:
+			break;
+		}
+	}
+
 	GameSafe();
 	//GameSafeWithStatus();
 
