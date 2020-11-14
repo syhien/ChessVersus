@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <algorithm>
 #include <conio.h>
+#include <cstdio>
 using namespace std;
 
 const string ask_for_check = "（按y确认，按其他按键取消）\n";
@@ -14,6 +15,7 @@ const string kick_to_continue = "按任意按键继续\n";
 
 Player player;
 vector <Record> record;
+vector <Status> status;
 
 string admin_password;
 int player1_id;
@@ -25,9 +27,7 @@ void GameInitialize();
 void Login();
 void AdminPanel();
 void GameSafe();
-void GameSafeWithStatus();
 void DrawConsole(char chess[8][8], pair<int, int> current_positon);
-void GraphTest();
 Record NewReversi(int player1_id, int player2_id, Status& status);
 Record NewGomoku(int player1_id, int player2_id, Status& status);
 Record NewMoves(int player1_id, int player2_id, Status& status);
@@ -50,6 +50,7 @@ int main()
 		char game_choose;
 		Record new_record;
 		Status new_status;
+		bool game_existed = 0;
 
 		switch (ch)
 		{
@@ -59,10 +60,43 @@ int main()
 			switch (game_choose)
 			{
 			case '1':
+				for (auto i = status.begin(); i != status.end(); i++)
+					if ((i->record.player1_id == player1_id and i->record.player2_id == player2_id) or (i->record.player1_id == player2_id and i->record.player2_id == player1_id))
+					{
+						cout << "存在一场过去的未分出胜负的棋局，是否恢复棋局？\n按y确认回溯，按其他按键取消回溯\n";
+						if (_getch() == 'y')
+						{
+							game_existed = 1;
+							new_status = *i;
+							status.erase(i);
+							cout << "即将回溯\n" << kick_to_continue, _getch();
+						}
+						else
+						{
+							cout << "不进行回溯\n" << kick_to_continue, _getch();
+						}
+						break;
+					}
+				if (!game_existed)
+				{
+					for (int i = 0; i < 8; i++)
+						for (int j = 0; j < 8; j++)
+							new_status.status[i][j] = ' ';
+					new_status.status[3][3] = '+';
+					new_status.status[4][4] = '+';
+					new_status.status[3][4] = '-';
+					new_status.status[4][3] = '-';
+					new_status.player_turn = 0;
+				}
 				new_record = NewReversi(player1_id, player2_id, new_status);
 				if (new_record.winner == -1)
 				{
-
+					status.push_back(new_status);
+					cout << "已保存本次未分出胜负的棋局\n" << kick_to_continue, _getch();
+				}
+				else if (new_record.winner > 1)
+				{
+					cout << "未分出胜负便结束的棋局\n" << kick_to_continue, _getch();
 				}
 				else
 				{
@@ -148,12 +182,26 @@ void GameInitialize()
 			fin >> new_record.time.tm_sec >> new_record.time.tm_min >> new_record.time.tm_hour >> new_record.time.tm_mday >> new_record.time.tm_mon >> new_record.time.tm_year >> new_record.time.tm_wday >> new_record.time.tm_yday >> new_record.time.tm_isdst >> new_record.game_id >> new_record.player1_id >> new_record.player2_id >> new_record.winner;
 			record.push_back(new_record);
 		}
-		int status_exist_int;
-		fin >> status_exist_int;
-		status_exist = status_exist_int ? true : false;
-		if (status_exist)
+		int num_of_status;
+		fin >> num_of_status;
+		for (int i = 0; i < num_of_status; i++)
 		{
-			//
+			Status new_status;
+			Record new_record;
+			fin >> new_record.time.tm_sec >> new_record.time.tm_min >> new_record.time.tm_hour >> new_record.time.tm_mday >> new_record.time.tm_mon >> new_record.time.tm_year >> new_record.time.tm_wday >> new_record.time.tm_yday >> new_record.time.tm_isdst >> new_record.game_id >> new_record.player1_id >> new_record.player2_id >> new_record.winner;
+			new_status.record = new_record;
+			for (int j = 0; j < 8; j++)
+				for (int k = 0; k < 8; k++)
+				{
+					int ch;
+					fin >> ch;
+					new_status.status[j][k] = (char)ch;
+				}
+			int player_turn;
+			fin >> player_turn;
+			new_status.player_turn = player_turn ? 1 : 0;
+			status.push_back(new_status);
+			DrawConsole(new_status.status, make_pair(0, 0));
 		}
 	}
 	fin.close();
@@ -393,25 +441,18 @@ void GameSafe()
 	fout << record.size() << endl;
 	for (auto i : record)
 		fout << i.time.tm_sec << " " << i.time.tm_min << " " << i.time.tm_hour << " " << i.time.tm_mday << " " << i.time.tm_mon << " " << i.time.tm_year << " " << i.time.tm_wday << " " << i.time.tm_yday << " " << i.time.tm_isdst << " " << i.game_id << " " << i.player1_id << " " << i.player2_id << " " << i.winner << endl;
-	fout << "0";
-}
-
-void GameSafeWithStatus()
-{
-	ofstream fout("game.data");
-	fout << admin_password << endl;
-	fout << player.all_player_.size() << endl;
-	for (auto i : player.all_player_)
-		fout << i.id_ << " " << i.name_ << " " << i.password_ << endl;
-	fout << record.size() << endl;
-	for (auto i : record)
+	fout << status.size() << endl;
+	for (auto j : status)
+	{
+		Record i = j.record;
 		fout << i.time.tm_sec << " " << i.time.tm_min << " " << i.time.tm_hour << " " << i.time.tm_mday << " " << i.time.tm_mon << " " << i.time.tm_year << " " << i.time.tm_wday << " " << i.time.tm_yday << " " << i.time.tm_isdst << " " << i.game_id << " " << i.player1_id << " " << i.player2_id << " " << i.winner << endl;
-	fout << "1";
-	//
-}
-
-void GraphTest()
-{
-	char chess[8][8] = { {'+','-','+','+',' ','+','+','+'},{'+','-','+','+',' ','+','+','+'} ,{'+','-','+','+',' ','+','+','+'} ,{'+','-','+','+',' ','+','+','+'} ,{'+','-','+','+',' ','+','+','+'} ,{'+','-','+','+',' ','+','+','+'} ,{'+','-','+','+',' ','+','+','+'} ,{'+','-','+','+',' ','+','+','+'} };
-	DrawConsole(chess, make_pair(3, 2));
+		for (int k = 0; k < 8; k++)
+			for (int l = 0; l < 8; l++)
+			{
+				int ch = (int)j.status[k][l];
+				fout << ch << " ";
+			}
+		fout << endl;
+		fout << (j.player_turn ? 1 : 0) << endl;
+	}
 }

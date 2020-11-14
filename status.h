@@ -8,5 +8,5 @@ struct Status
 {
 	Record record;
 	char status[8][8];
-	int next_player;
+	bool player_turn;
 };
