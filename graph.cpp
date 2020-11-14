@@ -4,7 +4,7 @@
 #include <cstring>
 using namespace std;
 
-void DrawConsole(char chess[8][8], pair<int, int> current_positon)
+void DrawConsole(char chess[8][8], pair <int, int> current_positon)
 {
 	system("cls");
 	string graph = "";

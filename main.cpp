@@ -28,6 +28,9 @@ void GameSafe();
 void GameSafeWithStatus();
 void DrawConsole(char chess[8][8], pair<int, int> current_positon);
 void GraphTest();
+Record NewReversi(int player1_id, int player2_id, Status& status);
+Record NewGomoku(int player1_id, int player2_id, Status& status);
+Record NewMoves(int player1_id, int player2_id, Status& status);
 
 int main()
 {
@@ -44,11 +47,42 @@ int main()
 		cout << "当前登录用户：" << player.GetName(player1_id) << endl << "当前登录用户：" << player.GetName(player2_id) << endl;
 		cout << "希望做些什么呢？按下操作前对应的键盘按键吧\n1.开始新游戏\n2.查看游戏记录\nESC.退出游戏\n";
 		char ch = _getch();
+		char game_choose;
+		Record new_record;
+		Status new_status;
 
 		switch (ch)
 		{
 		case '1':
+			cout << "请选择想要进行的游戏：\n1.翻转棋\n2.五子棋\n3.移子棋\n";
+			game_choose = _getch();
+			switch (game_choose)
+			{
+			case '1':
+				new_record = NewReversi(player1_id, player2_id, new_status);
+				if (new_record.winner == -1)
+				{
 
+				}
+				else
+				{
+					record.push_back(new_record);
+					if (!new_record.winner)
+						cout << "平局！双方握手言和\n" << kick_to_continue, _getch();
+					else
+						cout << "恭喜" << player.GetName(new_record.winner == 1 ? player1_id : player2_id) << "获胜\n" << kick_to_continue, _getch();
+				}
+				break;
+			case '2':
+
+				break;
+			case '3':
+
+				break;
+			default:
+				cout << "好像按下了程序不能理解的按键呢\n" << kick_to_continue, _getch();
+				break;
+			}
 			break;
 		case '2':
 			for (auto i : record)
