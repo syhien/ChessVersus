@@ -201,7 +201,6 @@ void GameInitialize()
 			fin >> player_turn;
 			new_status.player_turn = player_turn ? 1 : 0;
 			status.push_back(new_status);
-			DrawConsole(new_status.status, make_pair(0, 0));
 		}
 	}
 	fin.close();
