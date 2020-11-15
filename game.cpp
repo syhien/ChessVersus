@@ -343,7 +343,7 @@ Record NewReversi(Status& status)
 	status.record.time = *tm_t;
 	status.record.winner = -1;
 	cout << "下面为玩家们说明翻转棋的游戏规则\n1.在8X8的棋盘上交替下子\n2.游戏起始时，棋盘正中央交替地预置了 + - 两棋各2个棋子\n3.把自己颜色的棋子放在棋盘的空格上，而当自己放下的棋子在横、竖、斜八个方向内有一个自己的棋子且两棋子的连线上有且只有对方的棋子，则被夹在中间的全部翻转会成为自己的棋子。并且，只有在可以翻转棋子的地方才可以下子\n4.无法下子时，只能放弃此回合\n";
-	cout << "\n玩家1使用wasd控制光标上左下右移动选择落棋点，使用空格确认落棋，用 + 代表玩家1的棋子\n";
+	cout << "\n玩家1使用wasd控制光标上左下右移动选择落棋点，使TAB确认落棋，用 + 代表玩家1的棋子\n";
 	cout << "\n玩家2使用方向键控制光标上下左右移动选择落棋点，使用回车确认落棋，用 - 代表玩家2的棋子\n";
 	cout << "\n游戏中的任意时候都可以按下ESC中断游戏\n";
 	bool player_turn = status.player_turn;
@@ -539,7 +539,7 @@ Record NewGomoku(Status& status)
 	status.record.time = *tm_t;
 	status.record.winner = -1;
 	cout << "下面为玩家们说明翻转棋的游戏规则\n1.对于新的棋局，总是玩家1先手落棋\n2.每一步都必须落棋，率先将自己的棋子连成五子者胜\n3.当棋盘摆满且双方都未连成五子，视为平局\n";
-	cout << "\n玩家1使用wasd控制光标上左下右移动选择落棋点，使用空格确认落棋，用 + 代表玩家1的棋子\n";
+	cout << "\n玩家1使用wasd控制光标上左下右移动选择落棋点，使用TAB确认落棋，用 + 代表玩家1的棋子\n";
 	cout << "\n玩家2使用方向键控制光标上下左右移动选择落棋点，使用回车确认落棋，用 - 代表玩家2的棋子\n";
 	cout << "\n游戏中的任意时候都可以按下ESC中断游戏\n";
 	bool player_turn = status.player_turn;
@@ -666,8 +666,283 @@ Record NewGomoku(Status& status)
 	return status.record;
 }
 
+bool MovesWin(char chess[8][8], char c)
+{
+	for (int i = 0; i < 8; i++)
+		for (int j = 0; j < 8; j++)
+			if (chess[i][j] == c)
+			{
+				int f;
+				//right
+				f = 1;
+				for (int k = 1; j + k < 8; k++)
+					if (chess[i][j + k] != c)
+						break;
+					else
+						f++;
+				if (f == 4)
+					return 1;
+				//down right
+				f = 1;
+				for (int k = 1; j + k < 8 and i + k < 8; k++)
+					if (chess[i + k][j + k] != c)
+						break;
+					else
+						f++;
+				if (f == 4)
+					return 1;
+				//down
+				f = 1;
+				for (int k = 1; i + k < 8; k++)
+					if (chess[i + k][j] != c)
+						break;
+					else
+						f++;
+				if (f == 4)
+					return 1;
+				//down left
+				f = 1;
+				for (int k = 1; i + k < 8 and j - k >= 0; k++)
+					if (chess[i + k][j - k] != c)
+						break;
+					else
+						f++;
+				if (f == 4)
+					return 1;
+			}
+	return 0;
+}
+
+bool MovePutLegal(char chess[8][8], pair<int, int> cur, char c)
+{
+	if (cur.first - 1 >= 0 and cur.second - 1 >= 0 and chess[cur.first - 1][cur.second - 1] == c)
+		return 0;
+	if (cur.first - 1 >= 0 and cur.second >= 0 and chess[cur.first - 1][cur.second] == c)
+		return 0;
+	if (cur.first - 1 >= 0 and cur.second + 1 < 8 and chess[cur.first - 1][cur.second + 1] == c)
+		return 0;
+	if (cur.second - 1 >= 0 and chess[cur.first][cur.second - 1] == c)
+		return 0;
+	if (cur.second + 1 < 8 and chess[cur.first][cur.second + 1] == c)
+		return 0;
+	if (cur.first + 1 < 8 and cur.second - 1 >= 0 and chess[cur.first + 1][cur.second - 1] == c)
+		return 0;
+	if (cur.first + 1 < 8 and chess[cur.first + 1][cur.second] == c)
+		return 0;
+	if (cur.first + 1 < 8 and cur.second + 1 < 8 and chess[cur.first + 1][cur.second + 1] == c)
+		return 0;
+	return 1;
+}
+
+bool MoveLegal(char chess[8][8], pair<int, int> old, pair<int, int> cur)
+{
+	if (old == cur)
+		return 0;
+	if (old.first == cur.first)//left right
+	{
+		int i = old.first;
+		for (int j = min(old.second, cur.second) + 1; j < max(old.second, cur.second) and j < 8; j++)
+		{
+			if (chess[i][j] != ' ')
+				return 0;
+		}
+		return 1;
+	}
+	else if (old.second == cur.second)//up down
+	{
+		int j = old.second;
+		for (int i = min(old.first, cur.first) + 1; i < max(old.first, cur.first) and i < 8; i++)
+		{
+			if (chess[i][j] != ' ')
+				return 0;
+		}
+		return 1;
+	}
+	return 0;
+}
+
 Record NewMoves(Status& status)
 {
-
+	time_t t = time(0);
+	tm* tm_t = gmtime(&t);
+	status.record.time = *tm_t;
+	status.record.winner = -1;
+	cout << "下面为玩家们说明游戏规则\n1.游戏和五子棋类似，在这里只需连接四子即可获胜\n2.每个回合，玩家可以落子或者移动棋子\n3.落子不能落在己方棋子周围\n4.移动棋子可以选择让棋子朝上下左右四个方向移动任意步长直到被已经存在的棋子阻档\n";
+	cout << "\n玩家1使用wasd控制光标上左下右移动选择落棋点，使用TAB确认落棋，使用b选中希望移动的棋子后使用TAB确定位置，用 + 代表玩家1的棋子\n";
+	cout << "\n玩家2使用方向键控制光标上下左右移动选择落棋点，使用回车确认落棋，使用b选中希望移动的棋子后使用回车确定位置，用 - 代表玩家2的棋子\n";
+	cout << "\n游戏中的任意时候都可以按下ESC中断游戏\n";
+	bool player_turn = status.player_turn;
+	bool game_exit = 0;
+	while (!game_exit and !(MovesWin(status.status, '+') or MovesWin(status.status, '-')) and ChessCount(status.status, ' '))
+	{
+		cout << "接下来是玩家" << (!player_turn ? "1" : "2") << "的回合，按任意键继续\n", _getch();
+		if (!player_turn)
+		{
+			pair <int, int> position(0, 0);
+			pair <int, int> old_position(0, 0);
+			bool move = 0;
+			bool f = 0;
+			while (!f)
+			{
+				DrawConsole(status.status, position);
+				char ch = _getch();
+				switch (ch)
+				{
+				case 'w':
+					position.first = (position.first - 1 + 8) % 8;
+					break;
+				case 'a':
+					position.second = (position.second - 1 + 8) % 8;
+					break;
+				case 's':
+					position.first = (position.first + 1 + 8) % 8;
+					break;
+				case 'd':
+					position.second = (position.second + 1 + 8) % 8;
+					break;
+				case 9://tab
+					if (status.status[position.first][position.second] != ' ' or (!move and !MovePutLegal(status.status, position, '+')))
+					{
+						cout << "这里不能落棋\n请重新选择\n", _getch();
+						break;
+					}
+					if (move)
+					{
+						if (!MoveLegal(status.status, old_position, position))
+						{
+							cout << "这里不能落棋\n请重新选择\n", _getch();
+							break;
+						}
+						else
+						{
+							status.status[old_position.first][old_position.second] = ' ';
+							move = 0;
+						}
+					}
+					status.status[position.first][position.second] = '+';
+					DrawConsole(status.status, position);
+					f = 1;
+					break;
+				case 'b':
+					if (status.status[position.first][position.second] != '+')
+					{
+						cout << "无子或不能移动该棋子\n请重新选择\n", _getch();
+						break;
+					}
+					move = 1;
+					old_position = position;
+					status.status[position.first][position.second] = '%';
+					DrawConsole(status.status, position);
+					break;
+				case 27:
+					game_exit = 1;
+					f = 1;
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		else
+		{
+			pair <int, int> position(0, 0);
+			pair <int, int> old_position(0, 0);
+			bool move = 0;
+			bool f = 0;
+			while (!f)
+			{
+				DrawConsole(status.status, position);
+				char ch = _getch();
+				switch (ch)
+				{
+				case 'i':
+					position.first = (position.first - 1 + 8) % 8;
+					break;
+				case 'j':
+					position.second = (position.second - 1 + 8) % 8;
+					break;
+				case 'k':
+					position.first = (position.first + 1 + 8) % 8;
+					break;
+				case 'l':
+					position.second = (position.second + 1 + 8) % 8;
+					break;
+				case 13://enter
+					if (status.status[position.first][position.second] != ' ' or (!move and !MovePutLegal(status.status, position, '-')))
+					{
+						cout << "这里不能落棋\n请重新选择\n", _getch();
+						break;
+					}
+					if (move)
+					{
+						if (!MoveLegal(status.status, old_position, position))
+						{
+							cout << "这里不能落棋\n请重新选择\n", _getch();
+							break;
+						}
+						else
+						{
+							status.status[old_position.first][old_position.second] = ' ';
+							move = 0;
+						}
+					}
+					status.status[position.first][position.second] = '-';
+					DrawConsole(status.status, position);
+					f = 1;
+					break;
+				case 'b':
+					if (status.status[position.first][position.second] != '-')
+					{
+						cout << "无子或不能移动该棋子\n请重新选择\n", _getch();
+						break;
+					}
+					move = 1;
+					old_position = position;
+					status.status[position.first][position.second] = '%';
+					DrawConsole(status.status, position);
+					break;
+				case 27:
+					game_exit = 1;
+					f = 1;
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		if (!game_exit)
+			player_turn = !player_turn;
+	}
+	if (game_exit)
+	{
+		status.player_turn = player_turn;
+		cout << "是否保存棋局，按y确认保存，按其他按键不进行保存\n";
+		if (_getch() == 'y')
+		{
+			status.record.winner = -1;
+		}
+		else
+		{
+			status.record.winner = 9;
+		}
+	}
+	else
+	{
+		if (MovesWin(status.status, '+'))
+		{
+			cout << "玩家1连成四子\n";
+			status.record.winner = 1;
+		}
+		else if (MovesWin(status.status, '-'))
+		{
+			cout << "玩家2连成四子\n";
+			status.record.winner = 2;
+		}
+		else if (ChessCount(status.status, ' ') == 0)
+		{
+			cout << "棋盘已满，双方都未连成四子\n";
+			status.record.winner = 0;
+		}
+	}
 	return status.record;
 }
