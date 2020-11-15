@@ -90,13 +90,14 @@ int main()
 				}
 				new_status.record.player1_id = player1_id;
 				new_status.record.player2_id = player2_id;
+				new_status.record.game_id = 1;
 				new_record = NewReversi(new_status);
 				if (new_record.winner == -1)
 				{
 					status.push_back(new_status);
 					cout << "已保存本次未分出胜负的棋局\n" << kick_to_continue, _getch();
 				}
-				else if (new_record.winner > 1)
+				else if (new_record.winner > 2)
 				{
 					cout << "未分出胜负便结束的棋局\n" << kick_to_continue, _getch();
 				}
@@ -136,13 +137,14 @@ int main()
 				}
 				new_status.record.player1_id = player1_id;
 				new_status.record.player2_id = player2_id;
+				new_status.record.game_id = 2;
 				new_record = NewGomoku(new_status);
 				if (new_record.winner == -1)
 				{
 					status.push_back(new_status);
 					cout << "已保存本次未分出胜负的棋局\n" << kick_to_continue, _getch();
 				}
-				else if (new_record.winner > 1)
+				else if (new_record.winner > 2)
 				{
 					cout << "未分出胜负便结束的棋局\n" << kick_to_continue, _getch();
 				}
