@@ -61,7 +61,7 @@ int main()
 			{
 			case '1':
 				for (auto i = status.begin(); i != status.end(); i++)
-					if ((i->record.player1_id == player1_id and i->record.player2_id == player2_id) or (i->record.player1_id == player2_id and i->record.player2_id == player1_id))
+					if (((i->record.player1_id == player1_id and i->record.player2_id == player2_id) or (i->record.player1_id == player2_id and i->record.player2_id == player1_id)) and i->record.game_id == 1)
 					{
 						cout << "存在一场过去的未分出胜负的棋局，是否恢复棋局？\n按y确认回溯，按其他按键取消回溯\n";
 						if (_getch() == 'y')
