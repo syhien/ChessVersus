@@ -28,9 +28,9 @@ void Login();
 void AdminPanel();
 void GameSafe();
 void DrawConsole(char chess[8][8], pair<int, int> current_positon);
-Record NewReversi(int player1_id, int player2_id, Status& status);
-Record NewGomoku(int player1_id, int player2_id, Status& status);
-Record NewMoves(int player1_id, int player2_id, Status& status);
+Record NewReversi(Status& status);
+Record NewGomoku(Status& status);
+Record NewMoves(Status& status);
 
 int main()
 {
@@ -88,7 +88,9 @@ int main()
 					new_status.status[4][3] = '-';
 					new_status.player_turn = 0;
 				}
-				new_record = NewReversi(player1_id, player2_id, new_status);
+				new_status.record.player1_id = player1_id;
+				new_status.record.player2_id = player2_id;
+				new_record = NewReversi(new_status);
 				if (new_record.winner == -1)
 				{
 					status.push_back(new_status);
@@ -108,7 +110,50 @@ int main()
 				}
 				break;
 			case '2':
-
+				for (auto i = status.begin(); i != status.end(); i++)
+					if (((i->record.player1_id == player1_id and i->record.player2_id == player2_id) or (i->record.player1_id == player2_id and i->record.player2_id == player1_id)) and i->record.game_id == 2)
+					{
+						cout << "存在一场过去的未分出胜负的棋局，是否恢复棋局？\n按y确认回溯，按其他按键取消回溯\n";
+						if (_getch() == 'y')
+						{
+							game_existed = 1;
+							new_status = *i;
+							status.erase(i);
+							cout << "即将回溯\n" << kick_to_continue, _getch();
+						}
+						else
+						{
+							cout << "不进行回溯\n" << kick_to_continue, _getch();
+						}
+						break;
+					}
+				if (!game_existed)
+				{
+					for (int i = 0; i < 8; i++)
+						for (int j = 0; j < 8; j++)
+							new_status.status[i][j] = ' ';
+					new_status.player_turn = 0;
+				}
+				new_status.record.player1_id = player1_id;
+				new_status.record.player2_id = player2_id;
+				new_record = NewGomoku(new_status);
+				if (new_record.winner == -1)
+				{
+					status.push_back(new_status);
+					cout << "已保存本次未分出胜负的棋局\n" << kick_to_continue, _getch();
+				}
+				else if (new_record.winner > 1)
+				{
+					cout << "未分出胜负便结束的棋局\n" << kick_to_continue, _getch();
+				}
+				else
+				{
+					record.push_back(new_record);
+					if (!new_record.winner)
+						cout << "平局！双方握手言和\n" << kick_to_continue, _getch();
+					else
+						cout << "恭喜" << player.GetName(new_record.winner == 1 ? player1_id : player2_id) << "获胜\n" << kick_to_continue, _getch();
+				}
 				break;
 			case '3':
 

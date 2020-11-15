@@ -336,14 +336,12 @@ void ReversiPut(char chess[8][8], pair <int, int> position, char c)
 		chess[i.first][i.second] = c;
 }
 
-Record NewReversi(int player1_id, int player2_id, Status& status)
+Record NewReversi(Status& status)
 {
 	time_t t = time(0);
 	tm* tm_t = gmtime(&t);
 	status.record.time = *tm_t;
 	status.record.game_id = 1;
-	status.record.player1_id = player1_id;
-	status.record.player2_id = player2_id;
 	status.record.winner = -1;
 	cout << "下面为玩家们说明翻转棋的游戏规则\n1.在8X8的棋盘上交替下子\n2.游戏起始时，棋盘正中央交替地预置了 + - 两棋各2个棋子\n3.把自己颜色的棋子放在棋盘的空格上，而当自己放下的棋子在横、竖、斜八个方向内有一个自己的棋子且两棋子的连线上有且只有对方的棋子，则被夹在中间的全部翻转会成为自己的棋子。并且，只有在可以翻转棋子的地方才可以下子\n4.无法下子时，只能放弃此回合\n";
 	cout << "\n玩家1使用wasd控制光标上左下右移动选择落棋点，使用空格确认落棋，用 + 代表玩家1的棋子\n";
@@ -488,38 +486,14 @@ Record NewReversi(int player1_id, int player2_id, Status& status)
 	return status.record;
 }
 
-Record NewGomoku(int player1_id, int player2_id, Status& status)
+Record NewGomoku(Status& status)
 {
-	Record record;
-	time_t t = time(0);
-	tm* tm_t = gmtime(&t);
-	record.time = *tm_t;
-	record.game_id = 2;
-	record.player1_id = player1_id;
-	record.player2_id = player2_id;
-	record.winner = -1;
-	status.record = record;
-	for (int i = 0; i < 8; i++)
-		for (int j = 0; j < 8; j++)
-			status.status[i][j] = ' ';
 
-	return record;
+	return status.record;
 }
 
-Record NewMoves(int player1_id, int player2_id, Status& status)
+Record NewMoves(Status& status)
 {
-	Record record;
-	time_t t = time(0);
-	tm* tm_t = gmtime(&t);
-	record.time = *tm_t;
-	record.game_id = 3;
-	record.player1_id = player1_id;
-	record.player2_id = player2_id;
-	record.winner = -1;
-	status.record = record;
-	for (int i = 0; i < 8; i++)
-		for (int j = 0; j < 8; j++)
-			status.status[i][j] = ' ';
 
-	return record;
+	return status.record;
 }
